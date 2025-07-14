@@ -8,8 +8,8 @@ interface State {
   searchTerm: string;
 }
 
-class App extends Component<{}, State> {
-  constructor(props: {}) {
+class App extends Component<Record<string, never>, State> {
+  constructor(props: Record<string, never>) {
     super(props);
     const saved = localStorage.getItem('search') || '';
     this.state = {
