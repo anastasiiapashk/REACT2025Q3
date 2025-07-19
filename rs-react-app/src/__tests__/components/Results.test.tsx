@@ -52,4 +52,36 @@ describe('Results component', () => {
 
     expect(await screen.findByText(/no results found/i)).toBeInTheDocument();
   });
+
+  test('handles missing props gracefully', async () => {
+    const mockData = {
+      results: [
+        {
+          id: 1,
+          name: 'Unknown Character',
+          image: '',
+          status: '',
+          species: '',
+        },
+      ],
+    };
+
+    vi.spyOn(global, 'fetch').mockResolvedValue({
+      ok: true,
+      json: async () => mockData,
+    } as Response);
+
+    render(<Results searchTerm="test" />);
+
+    expect(await screen.findByText(/unknown character/i)).toBeInTheDocument();
+    expect(screen.getByText(/status:/i)).toBeInTheDocument();
+    expect(screen.getByText(/species:/i)).toBeInTheDocument();
+  });
+
+  test('loading indicators have appropriate ARIA label', () => {
+    vi.spyOn(global, 'fetch').mockImplementation(() => new Promise(() => {}));
+    render(<Results searchTerm="" />);
+    const loaders = screen.getAllByLabelText(/loading character placeholder/i);
+    expect(loaders.length).toBeGreaterThan(0);
+  });
 });

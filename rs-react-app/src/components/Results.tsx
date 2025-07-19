@@ -70,6 +70,7 @@ class Results extends Component<Props, State> {
             <div
               key={i}
               role="presentation"
+              aria-label="Loading character placeholder"
               style={{
                 width: '150px',
                 height: '250px',
