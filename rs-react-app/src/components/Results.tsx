@@ -69,6 +69,7 @@ class Results extends Component<Props, State> {
           {Array.from({ length: 6 }).map((_, i) => (
             <div
               key={i}
+              role="presentation"
               style={{
                 width: '150px',
                 height: '250px',
