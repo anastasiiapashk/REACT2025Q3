@@ -20,7 +20,10 @@ export default class ErrorButton extends Component<
     }
 
     return (
-      <button onClick={this.handleClick} style={{ marginTop: '20px' }}>
+      <button
+        onClick={this.handleClick}
+        className="mt-5 px-4 py-2 bg-red-500 text-black font-semibold rounded hover:bg-red-600 transition duration-200"
+      >
         Throw Error
       </button>
     );

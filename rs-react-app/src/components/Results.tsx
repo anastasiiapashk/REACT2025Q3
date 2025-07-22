@@ -68,20 +68,25 @@ class Results extends Component<Props, State> {
     }
 
     if (error) {
-      return <p style={{ color: 'red' }}>{error}</p>;
+      return <p className="text-red-500">{error}</p>;
     }
 
     return (
-      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem' }}>
+      <div className="flex flex-wrap gap-4">
         {data.map((char) => (
           <div
             key={char.id}
-            style={{ border: '1px solid #ccc', padding: '10px' }}
+            className="border border-gray-300 p-4 rounded shadow w-[150px] text-center"
           >
-            <img src={char.image} alt={char.name} width="150" />
-            <h4>{char.name}</h4>
-            <p>Status: {char.status}</p>
-            <p>Species: {char.species}</p>
+            <img
+              src={char.image}
+              alt={char.name}
+              width="150"
+              className="w-full h-auto rounded mb-2"
+            />
+            <h4 className="font-semibold">{char.name}</h4>
+            <p className="text-sm">Status: {char.status}</p>
+            <p className="text-sm">Species: {char.species}</p>
           </div>
         ))}
       </div>

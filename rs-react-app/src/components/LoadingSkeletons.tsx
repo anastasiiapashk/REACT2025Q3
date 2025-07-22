@@ -3,19 +3,13 @@ import { Component } from 'react';
 export default class LoadingSkeletons extends Component {
   render() {
     return (
-      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem' }}>
+      <div className="flex flex-wrap gap-4">
         {Array.from({ length: 6 }).map((_, i) => (
           <div
             key={i}
             role="presentation"
             aria-label="Loading character placeholder"
-            style={{
-              width: '150px',
-              height: '250px',
-              backgroundColor: '#e0e0e0',
-              borderRadius: '8px',
-              animation: 'pulse 1.5s infinite ease-in-out',
-            }}
+            className="w-[150px] h-[250px] bg-gray-300 rounded-lg animate-pulse duration-1500"
           />
         ))}
       </div>
