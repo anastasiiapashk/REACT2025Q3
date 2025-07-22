@@ -41,9 +41,8 @@ class Results extends Component<Props, State> {
   fetchData(term: string) {
     this.setState({ isLoading: true, error: null });
 
-    const url = term
-      ? `https://rickandmortyapi.com/api/character/?name=${term}`
-      : 'https://rickandmortyapi.com/api/character';
+    const baseUrl = 'https://rickandmortyapi.com/api/character';
+    const url = term ? `${baseUrl}?name=${encodeURIComponent(term)}` : baseUrl;
 
     fetch(url)
       .then((res) => {
