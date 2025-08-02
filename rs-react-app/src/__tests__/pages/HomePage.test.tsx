@@ -1,5 +1,6 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, test, expect, beforeEach, vi } from 'vitest';
+import { BrowserRouter } from 'react-router-dom';
 import HomePage from '../../pages/HomePage';
 import * as SearchModule from '../../components/Search';
 import * as ResultsModule from '../../components/Results';
@@ -22,7 +23,11 @@ describe('HomePage', () => {
       <div data-testid="mock-results">{searchTerm}</div>
     ));
 
-    render(<HomePage />);
+    render(
+      <BrowserRouter>
+        <HomePage />
+      </BrowserRouter>
+    );
 
     const input = screen.getByTestId('search-input');
     fireEvent.change(input, { target: { value: 'Rick' } });
