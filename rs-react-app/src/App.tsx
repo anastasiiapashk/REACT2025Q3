@@ -1,27 +1,20 @@
-import { useState, useEffect } from 'react';
-import Search from './components/Search';
-import Results from './components/Results';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import ErrorBoundary from './ErrorBoundary';
+import HomePage from './pages/HomePage';
+import AboutPage from './pages/AboutPage';
+import NotFoundPage from './pages/NotFoundPage';
 
 const App = () => {
-  const [searchTerm, setSearchTerm] = useState('');
-
-  useEffect(() => {
-    const saved = localStorage.getItem('search') || '';
-    setSearchTerm(saved);
-  }, []);
-
-  const handleSearch = (term: string) => {
-    setSearchTerm(term);
-  };
-
   return (
-    <div>
+    <BrowserRouter>
       <ErrorBoundary>
-        <Search onSearch={handleSearch} />
-        <Results searchTerm={searchTerm} />
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/about" element={<AboutPage />} />
+          <Route path="*" element={<NotFoundPage />} />
+        </Routes>
       </ErrorBoundary>
-    </div>
+    </BrowserRouter>
   );
 };
 
