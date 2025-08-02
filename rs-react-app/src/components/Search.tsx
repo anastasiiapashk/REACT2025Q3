@@ -31,6 +31,7 @@ const Search: FC<Props> = ({ onSearch }) => {
         }}
       >
         <input
+          data-testid="search-input"
           type="text"
           value={inputValue}
           onChange={handleInputChange}

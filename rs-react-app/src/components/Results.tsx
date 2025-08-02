@@ -35,8 +35,12 @@ const Results: FC<Props> = ({ searchTerm }) => {
         }
         const json = await res.json();
         setData(json.results);
-      } catch (err: any) {
-        setError(err.message || 'Something went wrong');
+      } catch (err: unknown) {
+        if (err instanceof Error) {
+          setError(err.message);
+        } else {
+          setError('Something went wrong');
+        }
       } finally {
         setIsLoading(false);
       }
