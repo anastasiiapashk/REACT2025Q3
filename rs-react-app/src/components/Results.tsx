@@ -1,4 +1,4 @@
-import { Component } from 'react';
+import { useEffect, useState, type FC } from 'react';
 import LoadingSkeletons from './LoadingSkeletons';
 
 interface Props {
@@ -13,85 +13,66 @@ interface Character {
   species: string;
 }
 
-interface State {
-  isLoading: boolean;
-  error: string | null;
-  data: Character[];
-}
+const Results: FC<Props> = ({ searchTerm }) => {
+  const [data, setData] = useState<Character[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
 
-class Results extends Component<Props, State> {
-  constructor(props: Props) {
-    super(props);
-    this.state = {
-      isLoading: false,
-      error: null,
-      data: [],
-    };
-  }
+  useEffect(() => {
+    const fetchData = async () => {
+      setIsLoading(true);
+      setError(null);
 
-  componentDidMount() {
-    this.fetchData(this.props.searchTerm);
-  }
+      const baseUrl = 'https://rickandmortyapi.com/api/character';
+      const url = searchTerm
+        ? `${baseUrl}?name=${encodeURIComponent(searchTerm)}`
+        : baseUrl;
 
-  componentDidUpdate(prevProps: Props) {
-    if (prevProps.searchTerm !== this.props.searchTerm) {
-      this.fetchData(this.props.searchTerm);
-    }
-  }
-
-  fetchData(term: string) {
-    this.setState({ isLoading: true, error: null });
-
-    const baseUrl = 'https://rickandmortyapi.com/api/character';
-    const url = term ? `${baseUrl}?name=${encodeURIComponent(term)}` : baseUrl;
-
-    fetch(url)
-      .then((res) => {
+      try {
+        const res = await fetch(url);
         if (!res.ok) {
           throw new Error('No results found');
         }
-        return res.json();
-      })
-      .then((data) => {
-        this.setState({ data: data.results, isLoading: false });
-      })
-      .catch((error) => {
-        this.setState({ error: error.message, isLoading: false });
-      });
+        const json = await res.json();
+        setData(json.results);
+      } catch (err: any) {
+        setError(err.message || 'Something went wrong');
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [searchTerm]);
+
+  if (isLoading) {
+    return <LoadingSkeletons />;
   }
 
-  render() {
-    const { isLoading, error, data } = this.state;
-
-    if (isLoading) {
-      return <LoadingSkeletons />;
-    }
-
-    if (error) {
-      return <p className="text-red-500">{error}</p>;
-    }
-
-    return (
-      <div className="flex flex-wrap gap-4">
-        {data.map((char) => (
-          <div
-            key={char.id}
-            className="border border-gray-300 p-4 rounded shadow w-[150px] text-center"
-          >
-            <img
-              src={char.image}
-              alt={char.name}
-              width="150"
-              className="w-full h-auto rounded mb-2"
-            />
-            <h4 className="font-semibold">{char.name}</h4>
-            <p className="text-sm">Status: {char.status}</p>
-            <p className="text-sm">Species: {char.species}</p>
-          </div>
-        ))}
-      </div>
-    );
+  if (error) {
+    return <p className="text-red-500">{error}</p>;
   }
-}
+
+  return (
+    <div className="flex flex-wrap gap-4">
+      {data.map((char) => (
+        <div
+          key={char.id}
+          className="border border-gray-300 p-4 rounded shadow w-[150px] text-center"
+        >
+          <img
+            src={char.image}
+            alt={char.name}
+            width="150"
+            className="w-full h-auto rounded mb-2"
+          />
+          <h4 className="font-semibold">{char.name}</h4>
+          <p className="text-sm">Status: {char.status}</p>
+          <p className="text-sm">Species: {char.species}</p>
+        </div>
+      ))}
+    </div>
+  );
+};
 
 export default Results;
