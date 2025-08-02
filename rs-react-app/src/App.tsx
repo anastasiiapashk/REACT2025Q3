@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import Search from './components/Search';
 import Results from './components/Results';
-import ErrorButton from './components/ErrorButton';
 import ErrorBoundary from './ErrorBoundary';
 
 const App = () => {
@@ -21,7 +20,6 @@ const App = () => {
       <ErrorBoundary>
         <Search onSearch={handleSearch} />
         <Results searchTerm={searchTerm} />
-        <ErrorButton />
       </ErrorBoundary>
     </div>
   );
