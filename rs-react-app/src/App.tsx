@@ -1,37 +1,30 @@
-import { Component } from 'react';
+import { useState, useEffect } from 'react';
 import Search from './components/Search';
 import Results from './components/Results';
 import ErrorButton from './components/ErrorButton';
 import ErrorBoundary from './ErrorBoundary';
 
-interface State {
-  searchTerm: string;
-}
+const App = () => {
+  const [searchTerm, setSearchTerm] = useState('');
 
-class App extends Component<Record<string, never>, State> {
-  constructor(props: Record<string, never>) {
-    super(props);
+  useEffect(() => {
     const saved = localStorage.getItem('search') || '';
-    this.state = {
-      searchTerm: saved,
-    };
-  }
+    setSearchTerm(saved);
+  }, []);
 
-  handleSearch = (term: string) => {
-    this.setState({ searchTerm: term });
+  const handleSearch = (term: string) => {
+    setSearchTerm(term);
   };
 
-  render() {
-    return (
-      <div>
-        <ErrorBoundary>
-          <Search onSearch={this.handleSearch} />
-          <Results searchTerm={this.state.searchTerm} />
-          <ErrorButton />
-        </ErrorBoundary>
-      </div>
-    );
-  }
-}
+  return (
+    <div>
+      <ErrorBoundary>
+        <Search onSearch={handleSearch} />
+        <Results searchTerm={searchTerm} />
+        <ErrorButton />
+      </ErrorBoundary>
+    </div>
+  );
+};
 
 export default App;
