@@ -1,50 +1,47 @@
-import { Component, type ChangeEvent } from 'react';
+import { useState, type FC, type ChangeEvent, useEffect } from 'react';
 
 interface Props {
   onSearch: (searchTerm: string) => void;
 }
 
-interface State {
-  inputValue: string;
-}
+const Search: FC<Props> = ({ onSearch }) => {
+  const [inputValue, setInputValue] = useState('');
 
-class Search extends Component<Props, State> {
-  state: State = {
-    inputValue: (localStorage.getItem('search') || '').trim(),
+  useEffect(() => {
+    const saved = localStorage.getItem('search')?.trim() || '';
+    setInputValue(saved);
+  }, []);
+
+  const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setInputValue(event.target.value);
   };
 
-  handleInputChange = (event: ChangeEvent<HTMLInputElement>): void => {
-    this.setState({ inputValue: event.target.value });
-  };
-
-  handleSearch = (): void => {
-    const cleaned: string = this.state.inputValue.trim();
+  const handleSearch = () => {
+    const cleaned = inputValue.trim();
     localStorage.setItem('search', cleaned);
-    this.props.onSearch(cleaned);
+    onSearch(cleaned);
   };
 
-  render() {
-    return (
-      <div>
-        <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            this.handleSearch();
-          }}
-        >
-          <input
-            type="text"
-            value={this.state.inputValue}
-            onChange={this.handleInputChange}
-            placeholder="Search..."
-          />
-          <button type="submit" disabled={!this.state.inputValue.trim()}>
-            Search
-          </button>
-        </form>
-      </div>
-    );
-  }
-}
+  return (
+    <div>
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          handleSearch();
+        }}
+      >
+        <input
+          type="text"
+          value={inputValue}
+          onChange={handleInputChange}
+          placeholder="Search..."
+        />
+        <button type="submit" disabled={!inputValue.trim()}>
+          Search
+        </button>
+      </form>
+    </div>
+  );
+};
 
 export default Search;
