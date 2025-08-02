@@ -1,5 +1,6 @@
 import { cleanup, render, screen } from '@testing-library/react';
 import { expect, describe, beforeEach, afterEach, vi, test } from 'vitest';
+import { BrowserRouter } from 'react-router-dom';
 import Results from '../../components/Results';
 
 describe('Results component', () => {
@@ -13,7 +14,11 @@ describe('Results component', () => {
 
   test('renders loading state initially', () => {
     vi.spyOn(global, 'fetch').mockImplementation(() => new Promise(() => {}));
-    render(<Results searchTerm="" />);
+    render(
+      <BrowserRouter>
+        <Results searchTerm="" />
+      </BrowserRouter>
+    );
     const loaders = screen.getAllByRole('presentation');
     expect(loaders.length).toBeGreaterThan(0);
   });
@@ -36,7 +41,11 @@ describe('Results component', () => {
       json: async () => mockData,
     } as Response);
 
-    render(<Results searchTerm="Rick" />);
+    render(
+      <BrowserRouter>
+        <Results searchTerm="Rick" />
+      </BrowserRouter>
+    );
 
     expect(await screen.findByText(/rick sanchez/i)).toBeInTheDocument();
     expect(screen.getByText(/status: alive/i)).toBeInTheDocument();
@@ -48,7 +57,11 @@ describe('Results component', () => {
       ok: false,
     } as Response);
 
-    render(<Results searchTerm="unknown" />);
+    render(
+      <BrowserRouter>
+        <Results searchTerm="unknown" />
+      </BrowserRouter>
+    );
 
     expect(await screen.findByText(/no results found/i)).toBeInTheDocument();
   });
@@ -71,7 +84,11 @@ describe('Results component', () => {
       json: async () => mockData,
     } as Response);
 
-    render(<Results searchTerm="test" />);
+    render(
+      <BrowserRouter>
+        <Results searchTerm="test" />
+      </BrowserRouter>
+    );
 
     expect(await screen.findByText(/unknown character/i)).toBeInTheDocument();
     expect(screen.getByText(/status:/i)).toBeInTheDocument();
@@ -80,7 +97,11 @@ describe('Results component', () => {
 
   test('loading indicators have appropriate ARIA label', () => {
     vi.spyOn(global, 'fetch').mockImplementation(() => new Promise(() => {}));
-    render(<Results searchTerm="" />);
+    render(
+      <BrowserRouter>
+        <Results searchTerm="" />
+      </BrowserRouter>
+    );
     const loaders = screen.getAllByLabelText(/loading character placeholder/i);
     expect(loaders.length).toBeGreaterThan(0);
   });
