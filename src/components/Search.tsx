@@ -1,16 +1,12 @@
-import { useState, type FC, type ChangeEvent, useEffect } from 'react';
+import { type FC, type ChangeEvent } from 'react';
+import useLocalStorage from '../hooks/useLocalStorage';
 
 interface Props {
   onSearch: (searchTerm: string) => void;
 }
 
 const Search: FC<Props> = ({ onSearch }) => {
-  const [inputValue, setInputValue] = useState('');
-
-  useEffect(() => {
-    const saved = localStorage.getItem('search')?.trim() || '';
-    setInputValue(saved);
-  }, []);
+  const [inputValue, setInputValue] = useLocalStorage('search', '');
 
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
     setInputValue(event.target.value);
@@ -18,7 +14,7 @@ const Search: FC<Props> = ({ onSearch }) => {
 
   const handleSearch = () => {
     const cleaned = inputValue.trim();
-    localStorage.setItem('search', cleaned);
+    setInputValue(cleaned);
     onSearch(cleaned);
   };
 

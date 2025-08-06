@@ -64,6 +64,13 @@ const Results: FC<Props> = ({ searchTerm }) => {
       <div className="flex flex-wrap gap-4">
         {data.map((char) => (
           <div
+            onClick={() =>
+              setSearchParams((prev) => {
+                const newParams = new URLSearchParams(prev);
+                newParams.set('details', String(char.id));
+                return newParams;
+              })
+            }
             key={char.id}
             className="border border-gray-300 p-4 rounded shadow w-[150px] text-center"
           >
