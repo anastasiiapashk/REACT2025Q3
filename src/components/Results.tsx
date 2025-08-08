@@ -1,6 +1,6 @@
 import { useEffect, useState, type FC } from 'react';
 import { useSearchParams } from 'react-router-dom';
-
+import { useSelectedItemsStore } from '../store/selectedItemsStore';
 import LoadingSkeletons from './LoadingSkeletons';
 
 interface Props {
@@ -17,16 +17,19 @@ interface Character {
 
 const Results: FC<Props> = ({ searchTerm }) => {
   const [data, setData] = useState<Character[]>([]);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
   const [searchParams, setSearchParams] = useSearchParams();
   const page = parseInt(searchParams.get('page') || '1', 10);
+
+  const selectedItems = useSelectedItemsStore((state) => state.selectedItems);
+  const toggleItem = useSelectedItemsStore((state) => state.toggleItem);
 
   useEffect(() => {
     const fetchData = async () => {
       setIsLoading(true);
       setError(null);
-
       const baseUrl = 'https://rickandmortyapi.com/api/character';
       const url = searchTerm
         ? `${baseUrl}?name=${encodeURIComponent(searchTerm)}&page=${page}`
@@ -51,29 +54,26 @@ const Results: FC<Props> = ({ searchTerm }) => {
     setSearchParams({ page: '1' });
   }, [searchTerm]);
 
-  if (isLoading) {
-    return <LoadingSkeletons />;
-  }
-
-  if (error) {
-    return <p className="text-red-500">{error}</p>;
-  }
+  if (isLoading) return <LoadingSkeletons />;
+  if (error) return <p className="text-red-500">{error}</p>;
 
   return (
     <div>
       <div className="flex flex-wrap gap-4">
         {data.map((char) => (
           <div
-            onClick={() =>
-              setSearchParams((prev) => {
-                const newParams = new URLSearchParams(prev);
-                newParams.set('details', String(char.id));
-                return newParams;
-              })
-            }
             key={char.id}
             className="border border-gray-300 p-4 rounded shadow w-[150px] text-center"
           >
+            <input
+              type="checkbox"
+              checked={selectedItems.some((i) => i.id === char.id)}
+              onChange={(e) => {
+                e.stopPropagation();
+                toggleItem(char);
+              }}
+              className="mb-2"
+            />
             <img
               src={char.image}
               alt={char.name}
@@ -83,9 +83,20 @@ const Results: FC<Props> = ({ searchTerm }) => {
             <h4 className="font-semibold">{char.name}</h4>
             <p className="text-sm">Status: {char.status}</p>
             <p className="text-sm">Species: {char.species}</p>
+            <button
+              onClick={() => {
+                const newParams = new URLSearchParams(searchParams);
+                newParams.set('details', String(char.id));
+                setSearchParams(newParams);
+              }}
+              className="text-blue-500 hover:underline mt-2"
+            >
+              View details
+            </button>
           </div>
         ))}
       </div>
+
       <div className="mt-4 flex gap-2">
         {page > 1 && (
           <button
