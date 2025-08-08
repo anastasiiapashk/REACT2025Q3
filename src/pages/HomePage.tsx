@@ -1,4 +1,4 @@
-import { Link, useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 import Search from '../components/Search';
 import Results from '../components/Results';
 import Details from '../components/Details';
@@ -11,15 +11,7 @@ const HomePage = () => {
   const hasDetails = searchParams.get('details');
 
   return (
-    <div className="p-4">
-      <nav className="mb-4">
-        <Link to="/" className="mr-4 text-blue-500 hover:underline">
-          Home
-        </Link>
-        <Link to="/about" className="text-blue-500 hover:underline">
-          About
-        </Link>
-      </nav>
+    <div className="p-4 bg-white dark:bg-gray-900 text-black dark:text-white min-h-screen">
       <div className="flex">
         <div className={hasDetails ? 'w-1/2' : 'w-full'}>
           <Search onSearch={setSearchTerm} />
