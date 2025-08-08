@@ -58,7 +58,7 @@ const Results: FC<Props> = ({ searchTerm }) => {
   if (error) return <p className="text-red-500">{error}</p>;
 
   return (
-    <div>
+    <div className={`${selectedItems.length > 0 ? 'pb-20' : ''}`}>
       <div className="flex flex-wrap gap-4">
         {data.map((char) => (
           <div
