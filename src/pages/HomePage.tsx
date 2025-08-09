@@ -11,7 +11,7 @@ const HomePage = () => {
   const hasDetails = searchParams.get('details');
 
   return (
-    <div className="p-4 bg-white dark:bg-gray-900 text-black dark:text-white min-h-screen">
+    <div className="p-4">
       <div className="flex">
         <div className={hasDetails ? 'w-1/2' : 'w-full'}>
           <Search onSearch={setSearchTerm} />

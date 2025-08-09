@@ -1,13 +1,12 @@
 @import 'tailwindcss';
 
+@custom-variant dark (&:is(.dark *));
+
+/* 🔹 Прибрала дефолтний темний фон і колір тексту */
 :root {
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
-
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -15,6 +14,7 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* 🔹 Додала стилі для лінків, щоб працювали і в dark */
 a {
   font-weight: 500;
   color: #646cff;
@@ -23,20 +23,20 @@ a {
 a:hover {
   color: #535bf2;
 }
+.dark a {
+  color: #93c5fd; /* світло-блакитний у темній темі */
+}
+.dark a:hover {
+  color: #60a5fa;
+}
 
 body {
   margin: 0;
-  display: flex;
-  place-items: center;
   min-width: 320px;
   min-height: 100vh;
 }
 
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
-}
-
+/* 🔹 Кнопки без примусового темного фону */
 button {
   border-radius: 8px;
   border: 1px solid transparent;
@@ -44,18 +44,21 @@ button {
   font-size: 1em;
   font-weight: 500;
   font-family: inherit;
-  background-color: #1a1a1a;
   cursor: pointer;
-  transition: border-color 0.25s;
+  transition: border-color 0.25s, background-color 0.25s;
 }
 button:hover {
   border-color: #646cff;
+}
+.dark button {
+  border-color: #64748b;
 }
 button:focus,
 button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
 
+/* 🔹 Для світлої теми */
 @media (prefers-color-scheme: light) {
   :root {
     color: #213547;
@@ -64,19 +67,11 @@ button:focus-visible {
   a:hover {
     color: #747bff;
   }
-  button {
-    background-color: #f9f9f9;
-  }
 }
 
+/* 🔹 Анімація */
 @keyframes pulse {
-  0% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.4;
-  }
-  100% {
-    opacity: 1;
-  }
+  0% { opacity: 1; }
+  50% { opacity: 0.4; }
+  100% { opacity: 1; }
 }

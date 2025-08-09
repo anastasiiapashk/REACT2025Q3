@@ -72,7 +72,7 @@ const Results: FC<Props> = ({ searchTerm }) => {
                 e.stopPropagation();
                 toggleItem(char);
               }}
-              className="mb-2"
+              className="mb-2 accent-blue-600 dark:accent-blue-400"
             />
             <img
               src={char.image}

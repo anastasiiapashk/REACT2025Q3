@@ -9,7 +9,7 @@ const App = () => {
   return (
     <BrowserRouter>
       <ErrorBoundary>
-        <div className="min-h-screen bg-white text-black dark:bg-gray-900 dark:text-white">
+        <div className="min-h-screen bg-white text-slate-900 dark:bg-slate-900 dark:text-slate-100 transition-colors duration-300">
           <Header />
           <Routes>
             <Route path="/" element={<HomePage />} />
